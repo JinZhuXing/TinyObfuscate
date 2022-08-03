@@ -218,16 +218,49 @@ void CTinyObfuscateDlg::OnBnClickedOk()
 	CString OriginalText,ResultText,ResultTextLine,VarnameText;
 	Original.GetWindowTextW(OriginalText);
 	Varname.GetWindowTextW(VarnameText);
-	int i;
+	int i, j;
 	int d;
 	int z;
 	int x;
 	int choice;
+
+	wchar_t w_pESC_char[] = { L'\a', L'\b', L'\f', L'\n', L'\r', L'\t', L'\v', L'\\' };
+	wchar_t w_pESC_str[] = { L'a', L'b', L'f', L'n', L'r', L't', L'v', L'\\' };
+
 	WCHAR c;
 	CString Formula;
 	CString TextWithJunk;
-	TextWithJunk = OriginalText;
+	
 	int Length = OriginalText.GetLength();
+
+
+	// parse escape characters
+	//TextWithJunk = OriginalText;
+	for (i = 0; i < Length; i++)
+	{
+		if (OriginalText.GetAt(i) == L'\\')
+		{
+			for (j = 0; j < 8; j++)
+			{
+				if (OriginalText.GetAt(i + 1) == w_pESC_str[j])
+				{
+					TextWithJunk += w_pESC_char[j];
+					i++;
+					break;
+				}
+			}
+			if (j >= 8)
+			{
+				TextWithJunk += OriginalText.GetAt(i);
+			}
+		}
+		else
+		{
+			TextWithJunk += OriginalText.GetAt(i);
+		}
+	}
+	Length = TextWithJunk.GetLength();
+
 	TextWithJunk += (CString)L" ";
 	for (i = Length + 1; i < Length * 2; i++)
 	{
