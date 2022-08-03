@@ -32,7 +32,7 @@ int RandomIntFromRange(int From, int To)
 
 bool find(const std::vector<int>& vec, int index)
 {
-	for (int i = 0; i < vec.size(); ++i)
+	for (int i = 0; i < (int)vec.size(); ++i)
 	{
 		if (index == vec[i])
 			return true;
